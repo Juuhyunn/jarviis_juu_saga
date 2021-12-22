@@ -1,11 +1,14 @@
 import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { HistoryPayload, historyRequest, RootState, ListDataPayload, historyListRequest, HistoryDataPayload, historyModifyRequest} from "../reducer/historySlice";
+import { HistoryPayload, historyRequest, RootState, ListDataPayload,
+    historyListRequest, HistoryDataPayload, historyModifyRequest, HistoryModifyPayload,
+     historyAutoAddRequest,
+     HistoryRemovePayload,
+     historyRemoveRequest} from "../reducer/historySlice";
 
 export function useHistory() {
     const { historyLoading } = useSelector((state: RootState) => state.history);
     const dispatch = useDispatch();
-
     const create = useCallback((data: HistoryPayload) => {
         dispatch(historyRequest(data));
     }, [])
@@ -13,11 +16,8 @@ export function useHistory() {
 }
 
 export function useHistoryList() {
-    alert("Hook")
-
     const { historyLoading } = useSelector((state: RootState) => state.history);
     const dispatch = useDispatch();
-
     const list = useCallback((data: ListDataPayload) => {
         dispatch(historyListRequest(data));
     }, [])
@@ -25,13 +25,28 @@ export function useHistoryList() {
 }
 
 export function useHistoryModify() {
-    alert("Hook")
-
     const { historyLoading } = useSelector((state: RootState) => state.history);
     const dispatch = useDispatch();
-
-    const list = useCallback((data: HistoryDataPayload) => {
+    const list = useCallback((data: HistoryModifyPayload) => {
         dispatch(historyModifyRequest(data));
     }, [])
     return { historyLoading, list};
+}
+
+export function useHistoryAutoAdd() {
+    const { historyLoading } = useSelector((state: RootState) => state.history);
+    const dispatch = useDispatch();
+    const autoAdd = useCallback((data: HistoryDataPayload) => {
+        dispatch(historyAutoAddRequest(data));
+    }, [])
+    return { historyLoading, autoAdd};
+}
+
+export function useHistoryRemove() {
+    const { historyLoading } = useSelector((state: RootState) => state.history);
+    const dispatch = useDispatch();
+    const remove = useCallback((data: HistoryRemovePayload) => {
+        dispatch(historyRemoveRequest(data));
+    }, [])
+    return { historyLoading, remove};
 }

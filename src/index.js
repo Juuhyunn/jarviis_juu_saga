@@ -21,13 +21,13 @@ const store = createStore(
 //rootSaga 하나로 묶기 
 import { all, fork } from "redux-saga/effects";
 import { watchExist, watchJoin, watchLogin, watchModify } from "features/user/module/userSaga";
-import { watchCreate, watchHistoryList, watchHistoryModify } from 'features/history/module/historySaga';
+import { watchCreate, watchHistoryAutoAdd, watchHistoryList, watchHistoryModify, watchHistoryRemove } from 'features/history/module/historySaga';
 import { rootReducer } from 'app/store';
 
 // rootSaga를 만들어줘서 store에 추가해주어야 합니다.
 export default function* rootSaga() {
   yield all([fork(watchLogin),fork(watchJoin),fork(watchExist),fork(watchModify),fork(watchCreate), fork(watchModify),
-    fork(watchHistoryList), fork(watchHistoryModify)]);
+    fork(watchHistoryList), fork(watchHistoryModify), fork(watchHistoryAutoAdd), fork(watchHistoryRemove)]);
 }
 
 //주의//

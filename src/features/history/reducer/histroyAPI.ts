@@ -1,5 +1,6 @@
 import axios from "axios";
-import { HistoryPayload, ListDataPayload, HistoryDataPayload } from "./historySlice";
+import { HistoryPayload, ListDataPayload, HistoryDataPayload, HistoryModifyPayload
+, HistoryRemovePayload } from "./historySlice";
 const SERVER = 'http://192.168.0.73:8000/api'
 const headers = {
     'Content-Type': 'application/json',
@@ -7,21 +8,20 @@ const headers = {
 }
 
 function createAPI( data: HistoryPayload){
+    alert(JSON.stringify(data))
     return axios.post(`${SERVER}/history/create`, JSON.stringify(data), { headers })
 }
 function listAPI( data: ListDataPayload){
-    // alert("api 들어옴")
-    // alert(JSON.stringify(data))
-
-
-    // return axios.get(`${SERVER}/history/list/${data.user_id}/${data.date}`)
     return axios.post(`${SERVER}/history/list`,JSON.stringify(data), { headers })
 }
-function modifyAPI( data: HistoryDataPayload){
-    // return axios.get(`${SERVER}/history/list/${data.user_id}/${data.date}`)
-    alert("api 들어옴")
-    alert(JSON.stringify(data))
+function modifyAPI( data: HistoryModifyPayload){
     return axios.put(`${SERVER}/history/modify`,JSON.stringify(data), { headers })
+}
+function autoAddAPI( data: HistoryDataPayload){
+    return axios.get(`${SERVER}/history/upload`)
+}
+function removeAPI( data: HistoryRemovePayload){
+    return axios.delete(`${SERVER}/history/remove/${data}`)
 }
 // const modify = x => axios.put(`${SERVER}/history/modify/${x}`)
 // const remove = x => axios.delete(`${SERVER}/history/remove/${x}`)
@@ -34,5 +34,7 @@ function modifyAPI( data: HistoryDataPayload){
 export default {
     createAPI,
     listAPI,
-    modifyAPI
+    modifyAPI,
+    autoAddAPI,
+    removeAPI
 }

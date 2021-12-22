@@ -12,7 +12,7 @@ import Button from '@mui/material/Button';
 import { Controller, useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux'
 import dayjs from "dayjs";
-import { historyRequest } from "../reducer/historySlice";
+import { historyRequest, historyAutoAddRequest } from "../reducer/historySlice";
 
 
 
@@ -46,6 +46,8 @@ export default function TimelineAdd() {
     return (<>
         {mode == 0 ? <>
             <Button variant="outlined" onClick={() => setMode(1)}>기록 추가</Button>
+            <Button variant="outlined" onClick={() => {
+                dispatch(historyAutoAddRequest())}}>자동 추가</Button>
         </>
             : <Box
                 component="form"
@@ -54,31 +56,33 @@ export default function TimelineAdd() {
                 }}
                 noValidate
                 autoComplete="off"
-                onSubmit= {handleSubmit(async (data) => { await dispatch(historyRequest({
-                    ...data,
-                   })) })}
-                // onSubmit={handleSubmit(async (data) => alert(JSON.stringify(data)))}
+                onSubmit={handleSubmit(async (data) => {
+                    await dispatch(historyRequest({
+                        ...data,
+                    }))
+                })}
+            // onSubmit={handleSubmit(async (data) => alert(JSON.stringify(data)))}
             >
                 <LocalizationProvider dateAdapter={AdapterDateFns} sx={{ width: '20ch' }}>
-                <Controller
+                    <Controller
                         name="log_date"
                         label="날씨"
                         control={control}
                         render={({ field }) => (
-                    <DateTimePicker
-                        {...field}
-                        // onChange={(newValue) => {
-                            // alert(`newValue :: ${dateFormat(newValue)}`);
-                            // alert(`바뀌기전value :: ${dateFormat(date)}`);
-                            // setDate(newValue);
-                            // alert(`바껴야되는value :: ${date}`);
-                        // }}
-                        renderInput={(field) => <TextField {...field} />
-                    }
-                    />)}/>
+                            <DateTimePicker
+                                {...field}
+                                // onChange={(newValue) => {
+                                // alert(`newValue :: ${dateFormat(newValue)}`);
+                                // alert(`바뀌기전value :: ${dateFormat(date)}`);
+                                // setDate(newValue);
+                                // alert(`바껴야되는value :: ${date}`);
+                                // }}
+                                renderInput={(field) => <TextField {...field} />
+                                }
+                            />)} />
 
                 </LocalizationProvider>
-                
+
                 <FormControl sx={{ width: '15ch' }}>
                     <InputLabel id="weather-select-label">날씨</InputLabel>
                     <Controller
@@ -123,6 +127,8 @@ export default function TimelineAdd() {
                                 <MenuItem value={'visit'}>방문</MenuItem>
                                 <MenuItem value={'payment'}>결제 내역</MenuItem>
                                 <MenuItem value={'study'}>공부</MenuItem>
+                                <MenuItem value={'workout'}>운동</MenuItem>
+
                             </Select>
                         )} />
                 </FormControl>

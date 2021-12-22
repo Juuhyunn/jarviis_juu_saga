@@ -43,11 +43,25 @@ export interface HistoryPayload {
     user_id: number;
 }
 
+export interface HistoryModifyPayload {
+    id: string,
+    user_id: string,
+    log_type: string,
+    contents: string,
+    location: string,
+    address: string,
+    log_date: string,
+    weather: string,
+}
+export interface HistoryRemovePayload {
+    id: number,
+}
 export interface HistoryState {
     historyLoading: boolean;
     historyData: any;
     error: any;
 }
+
 export interface ParamType {
     id: number;
 }
@@ -62,7 +76,6 @@ const historySlice = createSlice({
     initialState,
     reducers: {
         historyRequest(state: HistoryState, _action: PayloadAction<HistoryPayload>) {
-            // alert("여기 누구있어요?")
             state.historyLoading = true;
             state.error = null;
         },
@@ -76,12 +89,10 @@ const historySlice = createSlice({
         },
         //리스트
         historyListRequest(state: HistoryState, _action: PayloadAction<ListDataPayload>) {
-            // alert("여기 누구있어요?")
             state.historyLoading = true;
             state.error = null;
         },
         historyListSuccess(state: HistoryState, action: PayloadAction<HistoryDataPayload>) {
-            // console.log(JSON.stringify(action.payload))
             state.historyLoading = false;
             state.historyData = action.payload;
         },
@@ -90,22 +101,41 @@ const historySlice = createSlice({
             state.error = action.payload;
         },
         // 수정
-        historyModifyRequest(state: HistoryState, _action: PayloadAction<HistoryDataPayload>) {
-            // alert("여기 누구있어요?")
+        historyModifyRequest(state: HistoryState, _action: PayloadAction<HistoryModifyPayload>) {
             state.historyLoading = true;
             state.error = null;
-            // alert(JSON.stringify(_action.payload))
         },
-        historyModifySuccess(state: HistoryState, action: PayloadAction<HistoryDataPayload>) {
-            alert('성공했어요?')
+        historyModifySuccess(state: HistoryState, action: PayloadAction<HistoryModifyPayload>) {
             state.historyLoading = false;
-            // state.historyData = action.payload;
         },
         historyModifyFailure(state: HistoryState, action: PayloadAction<{ error: any }>) {
-            alert('실패했어요?')
             state.historyLoading = true;
             state.error = action.payload;
         },
+        // 기록 자동 추가
+        historyAutoAddRequest(state: HistoryState, _action: PayloadAction<HistoryDataPayload>) {
+            state.historyLoading = true;
+            state.error = null;
+        },
+        historyAutoAddSuccess(state: HistoryState, action: PayloadAction<HistoryDataPayload>) {
+            state.historyLoading = false;
+        },
+        historyAutoAddFailure(state: HistoryState, action: PayloadAction<{ error: any }>) {
+            state.historyLoading = true;
+            state.error = action.payload;
+        },
+        // 삭제
+        historyRemoveRequest(state: HistoryState, _action: PayloadAction<HistoryRemovePayload>) {
+            state.historyLoading = true;
+            state.error = null;
+        },
+        historyRemoveSuccess(state: HistoryState, action: PayloadAction<HistoryRemovePayload>) {
+            state.historyLoading = false;
+        },
+        historyRemoveFailure(state: HistoryState, action: PayloadAction<{ error: any }>) {
+            state.historyLoading = true;
+            state.error = action.payload;
+        }
 
     }
 })
@@ -129,7 +159,13 @@ export const {
     historyListFailure,
     historyModifyRequest,
     historyModifySuccess,
-    historyModifyFailure
+    historyModifyFailure,
+    historyAutoAddRequest,
+    historyAutoAddSuccess,
+    historyAutoAddFailure,
+    historyRemoveRequest,
+    historyRemoveSuccess,
+    historyRemoveFailure
 } = actions;
 
 export default reducer;
