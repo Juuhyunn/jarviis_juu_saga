@@ -1,14 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import nor1 from 'features/review/garden/images/normal/1.png'
 import nor2 from 'features/review/garden/images/normal/2.png'
 import nor3 from 'features/review/garden/images/normal/3.png'
 import red4 from 'features/review/garden/images/red/4.png'
 import red5 from 'features/review/garden/images/red/5.png'
+import purple4 from 'features/review/garden/images/purple/4.png'
+import purple5 from 'features/review/garden/images/purple/5.png'
+import blue4 from 'features/review/garden/images/blue/4.png'
+import blue5 from 'features/review/garden/images/blue/5.png'
 import 'features/review/style/gridStyle.scss'
+import { useDispatch, useSelector } from "react-redux";
+import { flowerListRequest } from "features/review/reducer/gardenSlice";
+import { values } from "lodash";
 
 export default function Flower() {
-    const [step, setStep] = useState(1)
-    const grow = (grade) => {
+    const [counter, setCounter] = useState(0)
+    const grow = (grade, color) => {
         if (grade === "1") {
             return (<img className='flower-img' src={nor1} />)
         } if (grade === "2") {
@@ -16,70 +23,74 @@ export default function Flower() {
         } if (grade === "3") {
             return (<img className='flower-img' src={nor3} />)
         } if (grade === "4") {
-            return (<img className='flower-img' src={red4} />)
+            if (color === "RED") {
+                return (<img className='flower-img' src={red4} />)
+            }
+            if (color === "BLUE") {
+                return (<img className='flower-img' src={blue4} />)
+            }
+            else {
+                return (<img className='flower-img' src={purple4} />)
+            }
         } if (grade === "5") {
-            return (<img className='flower-img' src={red5} />)
+            if (color === "RED") {
+                return (<img className='flower-img' src={red5} />)
+            }
+            if (color === "BLUE") {
+                return (<img className='flower-img' src={blue5} />)
+            }
+            else {
+                return (<img className='flower-img' src={purple5} />)
+            }
         } else {
             return (<></>)
         }
     }
-    const juuflowers = [
+    const [flower, setFlower] = useState(
         {
-            "id": "1",
-            "create_date": "2021-12-13 16:56:53.704187+00:00",
-            "update_date": "2021-12-13 16:56:53.704187+00:00",
-            "title": "작업",
-            "grade": "0",
-            "step": "1",
-            "color": "YELLOW",
-            "log_id": "[15]",
-            "event_id": null,
-            "user_id": "1"
-        },
-        {
-            "id": "2",
-            "create_date": "2021-12-13 16:56:53.811239+00:00",
-            "update_date": "2021-12-13 16:56:53.812239+00:00",
-            "title": "요가 수업",
-            "grade": "5",
-            "step": "15",
-            "color": "YELLOW",
-            "log_id": "[16]",
-            "event_id": null,
-            "user_id": "1"
-        },
-        {
-            "id": "10",
-            "create_date": "2021-12-15 08:56:35.526895+00:00",
-            "update_date": "2021-12-15 09:11:46.843991+00:00",
-            "title": "자바 공부",
-            "grade": "2",
-            "step": "6",
-            "color": "BLUE",
-            "log_id": "[18]",
-            "event_id": null,
-            "user_id": "1"
+            data:
+            {
+                "id": "1",
+                "create_date": "2021-12-13 16:56:53.704187+00:00",
+                "update_date": "2021-12-13 16:56:53.704187+00:00",
+                "title": "작업",
+                "grade": "0",
+                "step": "1",
+                "color": "YELLOW",
+                "log_id": "[15]",
+                "event_id": null,
+                "user_id": "1"
+            }
         }
-    ]
-    const test = juuflowers.map((value, index, array) => {
-        return (<>
-            {value.grade==0?<></>
-            : <div className="flower-div" >
-            <h1>{value.title} 꽃을 키워보자!</h1>
-            <div>{grow(value.grade)}</div>
-            <p>GRADE : {value.grade}</p>
-            <p>STEP : {value.step}</p>
-            {/* <button onClick={() => setStep(step + 1)}>Grow UP!</button> */}
-
-        </div>
+    )
+    useEffect(() => {
+        dispatch(flowerListRequest({
+            user_id: 1,
+        }))
+    }, []);
+    const dispatch = useDispatch()
+    const flowers = useSelector(state => state.garden.gardenData)
+    if (flowers != null && counter < 1) {
+        setCounter(counter + 1)
+        setFlower(flowers.data)
     }
-            
-        </>)
-
-    })
     return (
         <div>
-            {test}
-        </div>
+            <h2>지금까지 키운 꽃 :</h2>
+            {Object.keys(flower).map((value, index, array) => (
+                <p><b>{flower[value].title}</b> :: {flower[value].step} 회</p>
+            ))}
+            {Object.keys(flower).map((value, index, array) => (
+                <div>
+                    {flower[value].grade == 0 ? <></>
+                        : <div className="flower-div" >
+                            <h1>{flower[value].title} 꽃을 키워보자!</h1>
+                            <div>{grow(flower[value].grade, flower[value].color)}</div>
+                            <p>GRADE : {flower[value].grade}</p>
+                            <p>STEP : {flower[value].step}</p>
+                        </div>}
+                </div>
+            ))}
+        </div >
     )
 }

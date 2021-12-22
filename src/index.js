@@ -23,11 +23,13 @@ import { all, fork } from "redux-saga/effects";
 import { watchExist, watchJoin, watchLogin, watchModify } from "features/user/module/userSaga";
 import { watchCreate, watchHistoryAutoAdd, watchHistoryList, watchHistoryModify, watchHistoryRemove } from 'features/history/module/historySaga';
 import { rootReducer } from 'app/store';
+import { watchFlowerList } from 'features/review/module/gardenSaga';
 
 // rootSaga를 만들어줘서 store에 추가해주어야 합니다.
 export default function* rootSaga() {
   yield all([fork(watchLogin),fork(watchJoin),fork(watchExist),fork(watchModify),fork(watchCreate), fork(watchModify),
-    fork(watchHistoryList), fork(watchHistoryModify), fork(watchHistoryAutoAdd), fork(watchHistoryRemove)]);
+    fork(watchHistoryList), fork(watchHistoryModify), fork(watchHistoryAutoAdd), fork(watchHistoryRemove),
+  fork(watchFlowerList)]);
 }
 
 //주의//

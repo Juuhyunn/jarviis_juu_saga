@@ -35,7 +35,6 @@ export default function TimelineModify(props) {
     });
     return (<>
         {mode == 0 ? <>
-            <p>test :: {JSON.stringify(defaultValues)}</p>
             <Button variant="text" onClick={() => {
                 setMode(1)
             }}>수정 하기</Button>

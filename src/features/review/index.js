@@ -30,4 +30,6 @@ export {default as Flower} from 'features/review/garden/components/Flower'
 export {default as Review} from 'features/review/containers/Review'
 
 //review API
-export {default as reviewAPI} from 'features/review/reducer/reviewAPI'
+export {default as gardenAPI} from 'features/review/reducer/gardenAPI'
+//Slice
+export {default as gardenReducer} from 'features/review/reducer/gardenSlice'
