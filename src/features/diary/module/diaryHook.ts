@@ -1,12 +1,12 @@
 import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { FlowerIdPayload, flowerListRequest, RootState } from "../reducer/gardenSlice";
+import { DiaryFindPayload, diaryFindRequest, RootState } from "../reducer/diarySlice";
 
-export function useFlowerList() {
-    const { gardenLoading } = useSelector((state: RootState) => state.garden);
+export function useDiaryFind() {
+    const { diaryLoading } = useSelector((state: RootState) => state.diary);
     const dispatch = useDispatch();
-    const list = useCallback((data: FlowerIdPayload) => {
-        dispatch(flowerListRequest(data));
+    const list = useCallback((data: DiaryFindPayload) => {
+        dispatch(diaryFindRequest(data));
     }, [])
-    return { gardenLoading, list};
+    return { diaryLoading, list};
 }

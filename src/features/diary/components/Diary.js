@@ -16,146 +16,169 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import { useDispatch, useSelector } from "react-redux";
+import { diaryFindRequest } from "features/diary/reducer/diarySlice";
+import dayjs from "dayjs";
+
+
+
 
 export default function DiaryTest() {
-  const [test, setTest] = useState(new Date());
+  const [counter, setCounter] = useState(0)
   const today = new Date();
-  const dateToString = (day) => day.toISOString().substring(0, 10);
+  const dateFormat = (date) => dayjs(date).format("YYYY-MM-DD");
+  const [date, setDate] = useState(dateFormat(today));
+  const [diary, setDiary] = useState(
+    { data: {} }
+  )
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(diaryFindRequest({
+      user_id: 1,
+      diary_date: date
+    }))
+  }, [date]);
+  const findDiary = useSelector(state => state.diary.diaryData)
+  if (findDiary != null && counter < 1) {
+    setCounter(counter + 1)
+    setDiary(findDiary.data)
+  }
+
   return (
     <LayOut>
-          <div className="dp">
-            <TableContainer>
-              <Table>
-                <TableHead>
-                  <TableRow></TableRow>
-                </TableHead>
-                <TableBody>
-                  <TableRow>
-                    <TableCell align="center" style={{ width: "15vw" }}>
+      <div className="dp">
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow></TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                <TableCell align="center" style={{ width: "15vw" }}>
+                  <img
+                    class="wobble-hor-bottom"
+                    style={{ width: "4vw", cursor: "pointer" }}
+                    src={
+                      require("features/diary/images/fingerl.png").default
+                    }
+                    onClick={() =>
+                      setDate(new Date(date.setDate(date.getDate() - 1)))
+                    }
+                  />
+                </TableCell>
+                <TableCell>
+                  <div className="Watch">
+                    <div style={{ borderCollapse: "collapse" }}>
+                      <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        <DatePicker
+                          views={["day"]}
+                          label="날짜 이동"
+                          value={date}
+                          maxDate={today}
+                          onChange={(newValue) => {
+                            setDate(newValue);
+                          }}
+                          renderInput={(params) => (
+                            <TextField {...params} helperText={null} />
+                          )}
+                        />
+                      </LocalizationProvider>
+                    </div>
+                  </div>
+                </TableCell>
+                <TableCell align="center" style={{ width: "30%" }}>
+                  <DiarySmallText>
+                    {date.toLocaleString("ko-KR", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                      weekday: "long",
+                    })}
+                  </DiarySmallText>
+                </TableCell>
+                <TableCell style={{ textAlign: "center", width: "15%" }}>
+                  <img
+                    style={{ width: "16vw", cursor: "pointer" }}
+                    src={require("features/diary/images/today.png").default}
+                    onClick={() => setDate(today)}
+                  />
+                </TableCell>
+                <TableCell align="center">
+                  <DiarySmallText>맑음</DiarySmallText>
+                  <img style={{ width: "5vw" }} src={sunny} />
+                </TableCell>
+                <TableCell align="center" style={{ width: "15%" }}>
+                  {date.toISOString().substring(0, 10) <
+                    today.toISOString().substring(0, 10)}
+                  {dateToString(date) < dateToString(today) ? (
+                    <>
                       <img
                         class="wobble-hor-bottom"
-                        style={{ width: "4vw", cursor: "pointer" }}
+                        style={{
+                          width: "4vw",
+                          cursor: "pointer",
+                          visibility: "visible",
+                        }}
                         src={
-                          require("features/diary/images/fingerl.png").default
+                          require("features/diary/images/fingerr.png")
+                            .default
                         }
                         onClick={() =>
-                          setTest(new Date(test.setDate(test.getDate() - 1)))
+                          setDate(
+                            new Date(date.setDate(date.getDate() + 1))
+                          )
                         }
                       />
-                    </TableCell>
-                    <TableCell>
-                      <div className="Watch">
-                        <div style={{ borderCollapse: "collapse" }}>
-                          <LocalizationProvider dateAdapter={AdapterDateFns}>
-                            <DatePicker
-                              views={["day"]}
-                              label="날짜 이동"
-                              value={test}
-                              maxDate={today}
-                              onChange={(newValue) => {
-                                setTest(newValue);
-                              }}
-                              renderInput={(params) => (
-                                <TextField {...params} helperText={null} />
-                              )}
-                            />
-                          </LocalizationProvider>
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell align="center" style={{ width: "30%" }}>
-                      <DiarySmallText>
-                        {test.toLocaleString("ko-KR", {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                          weekday: "long",
-                        })}
-                      </DiarySmallText>
-                    </TableCell>
-                    <TableCell style={{ textAlign: "center", width: "15%" }}>
-                      <img
-                        style={{ width: "16vw", cursor: "pointer" }}
-                        src={require("features/diary/images/today.png").default}
-                        onClick={() => setTest(today)}
-                      />
-                    </TableCell>
-                    <TableCell align="center">
-                      <DiarySmallText>맑음</DiarySmallText>
-                      <img style={{ width: "5vw" }} src={sunny} />
-                    </TableCell>
-                    <TableCell align="center" style={{ width: "15%" }}>
-                      {test.toISOString().substring(0, 10) <
-                        today.toISOString().substring(0, 10)}
-                      {dateToString(test) < dateToString(today) ? (
-                        <>
-                          <img
-                            class="wobble-hor-bottom"
-                            style={{
-                              width: "4vw",
-                              cursor: "pointer",
-                              visibility: "visible",
-                            }}
-                            src={
-                              require("features/diary/images/fingerr.png")
-                                .default
-                            }
-                            onClick={() =>
-                              setTest(
-                                new Date(test.setDate(test.getDate() + 1))
-                              )
-                            }
-                          />
-                        </>
-                      ) : (
-                        <img
-                          class="wobble-hor-bottom"
-                          style={{
-                            width: "20%",
-                            cursor: "pointer",
-                            visibility: "hidden",
-                          }}
-                          src={
-                            require("features/diary/images/fingerr.png").default
-                          }
-                        />
-                      )}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow sx={{ border: 0, textAlign: "center" }}>
-                    <TableCell
-                      component="td"
-                      colSpan="6"
-                      style={{ textAlign: "center" }}
-                    >
-                      <DiarySmallText>제목 : 안주현의 그림 일기</DiarySmallText>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow sx={{ border: 0 }}>
-                    <TableCell
-                      component="td"
-                      colSpan="6"
-                      style={{ textAlign: "center" }}
-                    >
-                      <DiarySmallText>
-                        <img class="diary-img" src={diary} />
-                      </DiarySmallText>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow sx={{ border: 0 }}>
-                    <TableCell
-                      component="td"
-                      colSpan="6"
-                      style={{ textAlign: "center" }}
-                    >
-                      <Test />
-                    </TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </TableContainer>
-            {/* <Test/> */}
-          </div>
+                    </>
+                  ) : (
+                    <img
+                      class="wobble-hor-bottom"
+                      style={{
+                        width: "20%",
+                        cursor: "pointer",
+                        visibility: "hidden",
+                      }}
+                      src={
+                        require("features/diary/images/fingerr.png").default
+                      }
+                    />
+                  )}
+                </TableCell>
+              </TableRow>
+              <TableRow sx={{ border: 0, textAlign: "center" }}>
+                <TableCell
+                  component="td"
+                  colSpan="6"
+                  style={{ textAlign: "center" }}
+                >
+                  <DiarySmallText>제목 : 안주현의 그림 일기</DiarySmallText>
+                </TableCell>
+              </TableRow>
+              <TableRow sx={{ border: 0 }}>
+                <TableCell
+                  component="td"
+                  colSpan="6"
+                  style={{ textAlign: "center" }}
+                >
+                  <DiarySmallText>
+                    <img class="diary-img" src={diary} />
+                  </DiarySmallText>
+                </TableCell>
+              </TableRow>
+              <TableRow sx={{ border: 0 }}>
+                <TableCell
+                  component="td"
+                  colSpan="6"
+                  style={{ textAlign: "center" }}
+                >
+                  <Test />
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
+        {/* <Test/> */}
+      </div>
     </LayOut>
   );
 }

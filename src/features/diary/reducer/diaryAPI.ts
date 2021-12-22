@@ -1,15 +1,15 @@
 import axios from "axios";
-import { FlowerDataPayload, FlowerIdPayload } from "./gardenSlice";
+import { DiaryFindPayload } from "./diarySlice";
 const SERVER = 'http://192.168.0.73:8000/api'
 const headers = {
     'Content-Type': 'application/json',
     'Authorization': 'JWT fefege..'
 }
 
-function listAPI( data: FlowerIdPayload){
+function findAPI( data: DiaryFindPayload){
     // alert(`API :: data :: ${data.user_id}`)
-    return axios.get(`${SERVER}/flower/list/${data.user_id}`)
+    return axios.get(`${SERVER}/diary/find/${data.user_id}/${data.diary_date}`)
 }
 export default {
-    listAPI
+    findAPI
 }

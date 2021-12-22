@@ -1,24 +1,23 @@
 import { PayloadAction } from "@reduxjs/toolkit";
 import { call, put, takeLatest } from "redux-saga/effects";
-import gardenAPI from "../reducer/gardenAPI";
-import { FlowerDataPayload, FlowerIdPayload, flowerListFailure, flowerListRequest, flowerListSuccess } from "../reducer/gardenSlice";
+import diaryAPI from "../reducer/diaryAPI";
+import { DiaryDataPayload, diaryFindFailure, DiaryFindPayload, diaryFindRequest, diaryFindSuccess } from "../reducer/diarySlice";
 
-
-//리스트
-function* list(action: PayloadAction<FlowerIdPayload>) {
+// find
+function* find(action: PayloadAction<DiaryFindPayload>) {
     try {
         // alert("SAGA!")
-        const result: FlowerDataPayload = yield call(
-            gardenAPI.listAPI,
+        const result: DiaryDataPayload = yield call(
+            diaryAPI.findAPI,
             action.payload
         );
-        yield put(flowerListSuccess(result));
+        yield put(diaryFindSuccess(result));
     } catch (error: any) {
-        yield put(flowerListFailure(error))
+        yield put(diaryFindFailure(error))
         alert(error)
     }
 }
 
-export function* watchFlowerList() {
-    yield takeLatest(flowerListRequest.type, list);
+export function* watchDiaryFind() {
+    yield takeLatest(diaryFindRequest.type, find);
 }

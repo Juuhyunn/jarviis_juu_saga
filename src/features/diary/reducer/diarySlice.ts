@@ -1,58 +1,57 @@
 import { configureStore, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 
-export interface FlowerDataPayload {
+export interface DiaryDataPayload {
     data: {
-        id: number;
-        create_date: string;
-        update_date: string;
-        title: string;
-        grade: string;
-        step: string;
-        color: string;
-        log_id: string;
-        event_id: string;
-        user_id: number;
-
+        id: number,
+        diary_date: string,
+        weather: string,
+        location: string,
+        drawing: string,
+        contents: string,
+        memo: string,
+        log_id: string,
+        user_id: number
     }
 }
-export interface FlowerIdPayload {
+export interface DiaryFindPayload {
     user_id: number
+    diary_date: string
 }
 
-export interface GardenState {
-    gardenLoading: boolean;
-    gardenData: any;
+export interface DiaryState {
+    diaryLoading: boolean;
+    diaryData: any;
     error: any;
 }
 
 export interface ParamType {
     id: number;
 }
-const initialState: GardenState = {
-    gardenLoading: false,
-    gardenData: null,
+const initialState: DiaryState = {
+    diaryLoading: false,
+    diaryData: null,
     error: null,
 };
 
-const GardenSlice = createSlice({
-    name: "gardens",
+const DiarySlice = createSlice({
+    name: "diaries",
     initialState,
     reducers: {
-        flowerListRequest(state: GardenState, _action: PayloadAction<FlowerIdPayload>) {
+        diaryFindRequest(state: DiaryState, _action: PayloadAction<DiaryFindPayload>) {
             // alert("Slice!")
-            state.gardenLoading = true;
+            state.diaryLoading = true;
             state.error = null;
         },
-        flowerListSuccess(state: GardenState, action: PayloadAction<FlowerDataPayload>) {
+        diaryFindSuccess(state: DiaryState, action: PayloadAction<DiaryDataPayload>) {
             // alert("Slice SUCCESS!")
             // alert(JSON.stringify(action.payload))
-            state.gardenLoading = false;
-            state.gardenData = action.payload;
+            state.diaryLoading = false;
+            state.diaryData = action.payload;
         },
-        flowerListFailure(state: GardenState, action: PayloadAction<{ error: any }>) {
+        diaryFindFailure(state: DiaryState, action: PayloadAction<{ error: any }>) {
             alert("Slice FAIL!")
-            state.gardenLoading = true;
+            state.diaryLoading = true;
             state.error = action.payload;
         },
     }
@@ -61,17 +60,17 @@ const GardenSlice = createSlice({
 
 const store = configureStore({
     reducer: {
-        garden: GardenSlice.reducer,
+        diary: DiarySlice.reducer,
     },
 });
 
 export type RootState = ReturnType<typeof store.getState>;
-const { reducer, actions } = GardenSlice;
+const { reducer, actions } = DiarySlice;
 
 export const {
-    flowerListRequest,
-    flowerListSuccess,
-    flowerListFailure
+    diaryFindRequest,
+    diaryFindSuccess,
+    diaryFindFailure
 } = actions;
 
 export default reducer;
