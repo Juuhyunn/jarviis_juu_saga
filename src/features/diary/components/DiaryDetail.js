@@ -4,7 +4,8 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import 'features/diary/style/DiaryText.scss'
 
-export default function Test(){
+export default function DiaryDetail(props){
+    const diary = props.data
     const [mode, setMode] = useState(0)
     function initManuscript() {
         const manuscript = document.querySelectorAll(".manuscript");
@@ -56,15 +57,7 @@ export default function Test(){
     return(
         <div class="manuscript-all" id="diaryText">
         <div class="manuscript">
-            
-            <p>
-               오늘은 얄리얄라 얄라 춤을 췄다.
-               어뭐지?
-               개쩐당ㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎ
-            </p>
-            <p>
-                상호가 다이어리를 보고 예쁘다고 그랬다!
-            </p>
+            <p>{diary.contents}</p>
         </div>
         <br/>
         <div class="manuscript-all" id="diaryText">
@@ -81,7 +74,7 @@ export default function Test(){
         <div class="manuscript">
             {mode == 0 ?
             <p>
-              여기는 코멘트 자리에요 너 님이 쓰고싶은거 쓰는곳이라구요!
+              {diary.memo}
             </p>
             :<>
             <Box component="form" sx={{m:3, width: 1550, maxWidth: '100%',}} noValidate autoComplete="off">

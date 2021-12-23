@@ -7,7 +7,7 @@ const headers = {
 }
 
 function findAPI( data: DiaryFindPayload){
-    // alert(`API :: data :: ${data.user_id}`)
+    // alert(`API :: data :: ${data.diary_date}`)
     return axios.get(`${SERVER}/diary/find/${data.user_id}/${data.diary_date}`)
 }
 export default {

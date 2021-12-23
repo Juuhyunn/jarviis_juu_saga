@@ -45,9 +45,10 @@ const DiarySlice = createSlice({
         },
         diaryFindSuccess(state: DiaryState, action: PayloadAction<DiaryDataPayload>) {
             // alert("Slice SUCCESS!")
-            // alert(JSON.stringify(action.payload))
+            // alert(`action.payload :: ${JSON.stringify(action.payload)}`)
             state.diaryLoading = false;
             state.diaryData = action.payload;
+            // alert(`diaryData :: ${JSON.stringify(state.diaryData)}`)
         },
         diaryFindFailure(state: DiaryState, action: PayloadAction<{ error: any }>) {
             alert("Slice FAIL!")

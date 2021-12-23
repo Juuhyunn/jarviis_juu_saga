@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import sunny from "features/diary/images/sunny.png";
-import diaryimg from "features/diary/images/a.png";
+import diary from "features/diary/images/a.png";
 import "features/common/font/font.scss";
 import styled from "styled-components";
 import TextField from "@mui/material/TextField";
@@ -23,8 +23,8 @@ import dayjs from "dayjs";
 
 
 
-
 export default function DiaryTest() {
+  const [counter, setCounter] = useState(0)
   const today = new Date();
   const dateFormat = (date) => dayjs(date).format("YYYY-MM-DD");
   const [findDate, setFindDate] = useState(today);
@@ -33,76 +33,16 @@ export default function DiaryTest() {
   )
   const dispatch = useDispatch()
   useEffect(() => {
-    initManuscript(),
-      setCounter(0),
-      dispatch(diaryFindRequest({
-        user_id: 1,
-        diary_date: dateFormat(findDate)
-      }))
+    dispatch(diaryFindRequest({
+      user_id: 1,
+      diary_date: dateFormat(findDate)
+    }))
   }, [findDate]);
-  const [counter, setCounter] = useState(0)
   const findDiary = useSelector(state => state.diary.diaryData)
-  // if (findDiary != null && counter < 1) {
-  //   setCounter(counter + 1)
-  //   {Object.keys(findDiary).map((value, index, array) => (
-  //     setDiary(findDiary)
-  //     // alert(`map :: ${JSON.stringify(findDiary[value])}`)
-  //   ))
-  //   }
-  //   // alert(`selector :: ${JSON.stringify(findDiary.data[0])}`)
-  //   alert(`setDiary :: ${JSON.stringify(diary)}`)
-  // }
-  {Object.keys(findDiary).map((value, index, array) => (
-        // setDiary(findDiary)
-        alert(`map :: ${JSON.stringify(findDiary)}`)
-      ))
-      }
-  const [mode, setMode] = useState(0)
-  function initManuscript() {
-    const manuscript = document.querySelectorAll(".manuscript");
-    const handleResize = () => {
-      manuscript.forEach((elt) => {
-        resizeMnuascriptContainer(elt);
-        resizeImage(elt);
-      });
-    };
-
-    window.addEventListener("load", handleResize, { passive: true });
-    window.addEventListener("resize", handleResize, { passive: true });
-
-    manuscript.forEach((element) => {
-      element.querySelectorAll("p").forEach((element) => {
-        const text = element.innerText;
-
-        element.innerHTML = "";
-        [...text].forEach((word) => {
-          const span = document.createElement("span");
-          const textNode = document.createTextNode(word);
-
-          span.appendChild(textNode);
-          element.append(span);
-        });
-      });
-    });
-
-    handleResize();
+  if (findDiary != null && counter < 1) {
+    setCounter(counter + 1)
+    setDiary(findDiary.data)
   }
-  function resizeMnuascriptContainer(element) {
-    element.style.width = `${(Math.floor(element.parentElement.offsetWidth / 24) - 1) * 24 - 1
-      }px`;
-  }
-
-  function resizeImage(element) {
-    element.querySelectorAll("img").forEach((img) => {
-      const { naturalWidth, naturalHeight } = img;
-      const ratio = naturalHeight / naturalWidth;
-      const newHeight = element.offsetWidth * ratio;
-
-      img.height = Math.floor(newHeight - (newHeight % 32) - 8);
-    });
-  }
-
-  initManuscript();
 
   return (
     <LayOut>
@@ -170,39 +110,38 @@ export default function DiaryTest() {
                 <TableCell align="center" style={{ width: "15%" }}>
                   {/* {date.toISOString().substring(0, 10) <
                     today.toISOString().substring(0, 10)} */}
-                  {/* {findDate.toString().substring(0, 10) < today.toString().substring(0, 10) ? */}
-                  {findDate.getDate() < today.getDate() ?
-                    (
-                      <>
-                        <img
-                          class="wobble-hor-bottom"
-                          style={{
-                            width: "4vw",
-                            cursor: "pointer",
-                            visibility: "visible",
-                          }}
-                          src={
-                            require("features/diary/images/fingerr.png")
-                              .default
-                          }
-                          onClick={() =>
-                            setFindDate(new Date(findDate.setDate(findDate.getDate() + 1)))
-                          }
-                        />
-                      </>
-                    ) : (
+                  {findDate.toString().substring(0, 10) < today.toString().substring(0, 10) ?
+                   (
+                    <>
                       <img
                         class="wobble-hor-bottom"
                         style={{
-                          width: "20%",
+                          width: "4vw",
                           cursor: "pointer",
-                          visibility: "hidden",
+                          visibility: "visible",
                         }}
                         src={
-                          require("features/diary/images/fingerr.png").default
+                          require("features/diary/images/fingerr.png")
+                            .default
+                        }
+                        onClick={() =>
+                          setFindDate(new Date(findDate.setDate(findDate.getDate() + 1)))
                         }
                       />
-                    )}
+                    </>
+                  ) : (
+                    <img
+                      class="wobble-hor-bottom"
+                      style={{
+                        width: "20%",
+                        cursor: "pointer",
+                        visibility: "hidden",
+                      }}
+                      src={
+                        require("features/diary/images/fingerr.png").default
+                      }
+                    />
+                  )}
                 </TableCell>
               </TableRow>
               <TableRow sx={{ border: 0, textAlign: "center" }}>
@@ -211,7 +150,7 @@ export default function DiaryTest() {
                   colSpan="6"
                   style={{ textAlign: "center" }}
                 >
-                  <DiarySmallText>제목 : 안주현의 그림 일기 COUNTER :: {counter} </DiarySmallText>
+                  <DiarySmallText>제목 : 안주현의 그림 일기 </DiarySmallText>
                 </TableCell>
               </TableRow>
               <TableRow sx={{ border: 0 }}>
@@ -221,7 +160,7 @@ export default function DiaryTest() {
                   style={{ textAlign: "center" }}
                 >
                   <DiarySmallText>
-                    <img class="diary-img" src={diaryimg} />
+                    <img class="diary-img" src={diary} />
                   </DiarySmallText>
                 </TableCell>
               </TableRow>
@@ -231,50 +170,13 @@ export default function DiaryTest() {
                   colSpan="6"
                   style={{ textAlign: "center" }}
                 >
-                  <div class="manuscript-all" id="diaryText">
-                    <div class="manuscript">
-                      <p>{diary.contents}</p>
-                    </div>
-                    <br />
-                    <div class="manuscript-all" id="diaryText">
-                      <tr>
-                        {mode == 0 ?
-                          <><td>
-                            <img class="diary-pencil" src={require("features/diary/images/edit.png").default}
-                              onClick={() => setMode(1)} /></td><h2>코멘트를 달아보자!</h2></>
-                          :
-                          <><td>
-                            <img class="diary-pencil" src={require("features/diary/images/edit.png").default}
-                              onClick={() => setMode(0)} /></td><h2>작성 다 했어!</h2></>}
-                      </tr>
-                      <div class="manuscript">
-                        {mode == 0 ?
-                          <p>
-                            {diary.memo}
-                          </p>
-                          : <>
-                            <Box component="form" sx={{ m: 3, width: 1550, maxWidth: '100%', }} noValidate autoComplete="off">
-                              <TextField
-                                id="standard-multiline-static"
-                                label="MEMO"
-                                multiline
-                                rows={4}
-                                // defaultValue="MEMO"
-                                variant="standard"
-                                fullWidth
-                              />
-                            </Box>
-                          </>}
-                      </div>
-
-
-                    </div>
-                  </div>
+                  <DiaryDetail data={diary}/>
                 </TableCell>
               </TableRow>
             </TableBody>
           </Table>
         </TableContainer>
+        {/* <Test/> */}
       </div>
     </LayOut>
   );
