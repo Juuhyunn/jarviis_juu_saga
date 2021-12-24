@@ -7,7 +7,7 @@ import {
   UserRegister,
 } from "features/user";
 import { Route, Routes } from "react-router-dom"; //21-11-06 v6로 버전업이후 switch -> routes / component -> element= {<Home/>}/>
-import { Diary} from "features/diary";
+import { Diary, NextDiary, PrevDiary} from "features/diary";
 import { Review } from "features/review";
 import { History } from "features/history";
 import { About } from "features/suggestion";
@@ -43,6 +43,8 @@ const App = () => {
         <Route path='/admin' element={<AdminPage />} />
         <Route path='/qna/QnA' element={<QnA/>} />
         <Route path='/mypage/setting' element={<Setting/>} />
+        {/* <Route path='/diary/prev' element={<PrevDiary/>} /> */}
+        {/* <Route path='/diary/next' element={<NextDiary/>} /> */}
       </Routes>
     </div>
   );

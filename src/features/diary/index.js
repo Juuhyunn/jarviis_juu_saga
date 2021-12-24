@@ -1,4 +1,6 @@
 export {default as Diary} from 'features/diary/components/Diary'
+// export {default as NextDiary} from 'features/diary/components/NextDiary'
+// export {default as PrevDiary} from 'features/diary/components/PrevDiary'
 
 
 //API

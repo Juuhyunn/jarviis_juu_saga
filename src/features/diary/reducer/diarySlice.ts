@@ -11,7 +11,8 @@ export interface DiaryDataPayload {
         contents: string,
         memo: string,
         log_id: string,
-        user_id: number
+        user_id: number,
+        process: string
     }
 }
 export interface DiaryFindPayload {
@@ -53,15 +54,16 @@ const DiarySlice = createSlice({
             // alert(`action.payload :: ${JSON.stringify(action.payload)}`)
             state.diaryLoading = false;
             state.diaryData = action.payload;
-            // alert(`diaryData :: ${JSON.stringify(state.diaryData)}`)
+            // window.localStorage.setItem("sessionDiaryDate", action.payload.data.diary_date)
+            // alert(`결국 diaryData :: ${JSON.stringify(state.diaryData)}`)
         },
         diaryFindFailure(state: DiaryState, action: PayloadAction<{ error: any }>) {
-            alert("Slice FAIL!")
+            alert(`Slice FAIL! :: ${action.payload}`)
             state.diaryLoading = true;
             state.error = action.payload;
         },
         diaryMemoRequest(state: DiaryState, _action: PayloadAction<DiaryMemoPayload>) {
-            alert("Slice!")
+            // alert("Slice!")
             state.diaryLoading = true;
             state.error = null;
         },
@@ -72,7 +74,7 @@ const DiarySlice = createSlice({
             window.location.href = "../diary/diary"
         },
         diaryMemoFailure(state: DiaryState, action: PayloadAction<{ error: any }>) {
-            alert("Slice FAIL!")
+            alert(`Slice FAIL! :: ${action.payload}`)
             state.diaryLoading = true;
             state.error = action.payload;
         },

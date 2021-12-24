@@ -21,57 +21,52 @@ import { diaryFindRequest } from "features/diary/reducer/diarySlice";
 import dayjs from "dayjs";
 import MemoModify from "features/diary/components/MemoModify"
 import 'features/diary/style/DiaryText.scss'
+import JsxDiary from "./JsxDiary";
+import { Link } from "react-router-dom";
 
 
 
 
 
 
-export default function DiaryTest() {
-  const today = new Date();
+
+export default function NextDiary() {
+  // alert(`어떡해${window.localStorage.getItem("sessionDiaryDate")}`)
   const dateFormat = (date) => dayjs(date).format("YYYY-MM-DD");
-  const [findDate, setFindDate] = useState(today);
+  const findDiary = useSelector(state => state.diary.diaryData)
+  // const testDate1 = new Date(window.localStorage.getItem("sessionDiaryDate"))
+  const testDate1 = new Date(findDiary.data.diary_date)
+  alert(`?? 다음날 왜 안대 :: ${dateFormat(testDate1)}`)
+  window.localStorage.setItem("sessionDiaryDate", dateFormat(new Date(testDate1.setDate(testDate1.getDate() + 1))))
+  const testDate = window.localStorage.getItem("sessionDiaryDate")
+  const findDate = new Date(testDate)
+  alert(`세션 :: ${testDate}`)
+  const today = new Date();
+  // const [findDate, setFindDate] = useState(new Date(testDate));
   const [diary, setDiary] = useState(
     { data: {} }
   )
   const dispatch = useDispatch()
   const [counter, setCounter] = useState(0)
-  const addDate = () => {
-    // alert("카운터 바꿔~!"),
-    setCounter(0),
-      setFindDate(new Date(findDate.setDate(findDate.getDate() + 1)))
-  }
-  const subDate = e => {
-    e.preventdefault,
-      setCounter(0),
-      setFindDate(new Date(findDate.setDate(findDate.getDate() - 1)))
-  }
   useEffect(() => {
     initManuscript(),
       setCounter(0),
       dispatch(diaryFindRequest({
         user_id: 1,
-        diary_date: dateFormat(findDate)
+        diary_date: dateFormat(new Date(testDate1))
       }))
-  }, [findDate]);
-  // alert(`counter ${counter}`)
-  const findDiary = useSelector(state => state.diary.diaryData)
-  if (findDiary != null && counter < 1) {
-    setCounter(counter + 1)
-    // {Object.keys(findDiary).map((value, index, array) => (
-    //   setDiary(findDiary)
-    //   alert(`map :: ${JSON.stringify(findDiary[value])}`)
-    // ))
-    // }
-    setDiary(findDiary.data)
-    // alert(`selector :: ${JSON.stringify(findDiary.data[0])}`)
-    // alert(`setDiary :: ${JSON.stringify(diary)}`)
-  }
-  // {Object.keys(findDiary).map((value, index, array) => (
-  //       setDiary(findDiary)
-  //       alert(`map :: ${JSON.stringify(findDiary)}`)
-  //     ))
-  //     }
+  }, []);
+  alert(`counter ${counter}`)
+  alert(`결국 데이터 제발 :: ${JSON.stringify(findDiary.data)}`)
+  // if (findDiary != null && counter < 2) {
+    if (dateFormat(findDiary.data.diary_date) == dateFormat(new Date(testDate))  && counter < 1) {
+      alert(`비교 :: ${dateFormat(new Date(testDate))}`)
+      setCounter(counter + 1)
+      setDiary(findDiary.data)
+    }
+    else if (findDiary.data.process == "Nothing") {
+      alert("Nothing!")
+    }
   const [mode, setMode] = useState(0)
   function initManuscript() {
     const manuscript = document.querySelectorAll(".manuscript");
@@ -122,6 +117,7 @@ export default function DiaryTest() {
 
   // }
 
+
   return (
     <LayOut>
       <div className="dp">
@@ -133,17 +129,14 @@ export default function DiaryTest() {
             <TableBody>
               <TableRow>
                 <TableCell align="center" style={{ width: "15vw" }}>
-                  <img
-                    class="wobble-hor-bottom"
-                    style={{ width: "4vw", cursor: "pointer" }}
-                    src={
-                      require("features/diary/images/fingerl.png").default
-                    }
-                    onClick={e =>
-                      subDate(e)
-                      // setFindDate(new Date(findDate.setDate(findDate.getDate() - 1)))
-                    }
-                  />
+                  <Link to="/diary/prev" >
+                    <img
+                      class="wobble-hor-bottom"
+                      style={{ width: "4vw", cursor: "pointer" }}
+                      src={
+                        require("features/diary/images/fingerl.png").default
+                      }
+                       /></Link>
                 </TableCell>
                 <TableCell>
                   <div className="Watch">
@@ -152,7 +145,7 @@ export default function DiaryTest() {
                         <DatePicker
                           views={["day"]}
                           label="날짜 이동"
-                          value={diary.diary_date}
+                          value={findDate}
                           maxDate={today}
                           onChange={(newValue) => {
                             setFindDate(newValue);
@@ -176,23 +169,20 @@ export default function DiaryTest() {
                   </DiarySmallText>
                 </TableCell>
                 <TableCell style={{ textAlign: "center", width: "15%" }}>
-                  <img
-                    style={{ width: "16vw", cursor: "pointer" }}
-                    src={require("features/diary/images/today.png").default}
-                    onClick={() => setFindDate(today)}
-                  />
+                  <Link to="/diary/diary" >
+                    <img
+                      style={{ width: "16vw", cursor: "pointer" }}
+                      src={require("features/diary/images/today.png").default}
+                    /></Link>
                 </TableCell>
                 <TableCell align="center">
                   <DiarySmallText>{diary.weather}</DiarySmallText>
                   <img style={{ width: "5vw" }} src={sunny} />
                 </TableCell>
                 <TableCell align="center" style={{ width: "15%" }}>
-                  {/* {date.toISOString().substring(0, 10) <
-                    today.toISOString().substring(0, 10)} */}
-                  {/* {findDate.toString().substring(0, 10) < today.toString().substring(0, 10) ? */}
                   {findDate.getDate() < today.getDate() ?
                     (
-                      <>
+                      <><Link to="/diary/next" >
                         <img
                           class="wobble-hor-bottom"
                           style={{
@@ -204,11 +194,11 @@ export default function DiaryTest() {
                             require("features/diary/images/fingerr.png")
                               .default
                           }
-                          onClick={() =>
-                            // setFindDate(new Date(findDate.setDate(findDate.getDate() + 1)))
-                            addDate()
+                          onClick={
+                        window.localStorage.setItem("sessionDiaryDate", dateFormat(new Date(findDate.setDate(findDate.getDate() + 1))))
+
                           }
-                        />
+                        /></Link>
                       </>
                     ) : (
                       <img
@@ -265,7 +255,7 @@ export default function DiaryTest() {
                           :
                           <><td>
                             <img class="diary-pencil" src={require("features/diary/images/edit.png").default}
-                              onClick={() => setMode(0)} /></td><h2>그만 할래!</h2></>}
+                              onClick={() => setMode(0)} /></td><h2>작성 다 했어!</h2></>}
                       </tr>
                       <div class="manuscript">
                         {mode == 0 ?
@@ -276,7 +266,6 @@ export default function DiaryTest() {
                             <MemoModify data={diary} />
                           </>}
                       </div>
-
                     </div>
                   </div>
                 </TableCell>

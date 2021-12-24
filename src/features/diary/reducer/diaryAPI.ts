@@ -12,7 +12,7 @@ function findAPI( data: DiaryFindPayload){
 }
 
 function memoAPI( data: DiaryMemoPayload){
-    alert(`API :: data :: ${JSON.stringify(data)}`)
+    // alert(`API :: data :: ${JSON.stringify(data)}`)
     return axios.put(`${SERVER}/diary/memo`,JSON.stringify(data), { headers })
 }
 export default {
