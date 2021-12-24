@@ -19,6 +19,7 @@ import TableRow from "@mui/material/TableRow";
 import { useDispatch, useSelector } from "react-redux";
 import { diaryFindRequest } from "features/diary/reducer/diarySlice";
 import dayjs from "dayjs";
+import MemoModify from "features/diary/components/MemoModify"
 
 
 
@@ -32,6 +33,17 @@ export default function DiaryTest() {
     { data: {} }
   )
   const dispatch = useDispatch()
+  const [counter, setCounter] = useState(0)
+  const addDate = () => {
+    // alert("카운터 바꿔~!"),
+      setCounter(0),
+      setFindDate(new Date(findDate.setDate(findDate.getDate() + 1)))
+  }
+  const subDate = () => {
+    // alert("카운터 바꿔~!"),
+      setCounter(0),
+      setFindDate(new Date(findDate.setDate(findDate.getDate() - 1)))
+  }
   useEffect(() => {
     initManuscript(),
       setCounter(0),
@@ -40,23 +52,24 @@ export default function DiaryTest() {
         diary_date: dateFormat(findDate)
       }))
   }, [findDate]);
-  const [counter, setCounter] = useState(0)
+  // alert(`counter ${counter}`)
   const findDiary = useSelector(state => state.diary.diaryData)
-  // if (findDiary != null && counter < 1) {
-  //   setCounter(counter + 1)
-  //   {Object.keys(findDiary).map((value, index, array) => (
-  //     setDiary(findDiary)
-  //     // alert(`map :: ${JSON.stringify(findDiary[value])}`)
-  //   ))
-  //   }
-  //   // alert(`selector :: ${JSON.stringify(findDiary.data[0])}`)
-  //   alert(`setDiary :: ${JSON.stringify(diary)}`)
-  // }
-  {Object.keys(findDiary).map((value, index, array) => (
-        // setDiary(findDiary)
-        alert(`map :: ${JSON.stringify(findDiary)}`)
-      ))
-      }
+  if (findDiary != null && counter < 1) {
+    setCounter(counter + 1)
+    // {Object.keys(findDiary).map((value, index, array) => (
+    //   setDiary(findDiary)
+    //   alert(`map :: ${JSON.stringify(findDiary[value])}`)
+    // ))
+    // }
+    setDiary(findDiary.data)
+    // alert(`selector :: ${JSON.stringify(findDiary.data[0])}`)
+    // alert(`setDiary :: ${JSON.stringify(diary)}`)
+  }
+  // {Object.keys(findDiary).map((value, index, array) => (
+  //       setDiary(findDiary)
+  //       alert(`map :: ${JSON.stringify(findDiary)}`)
+  //     ))
+  //     }
   const [mode, setMode] = useState(0)
   function initManuscript() {
     const manuscript = document.querySelectorAll(".manuscript");
@@ -122,7 +135,8 @@ export default function DiaryTest() {
                       require("features/diary/images/fingerl.png").default
                     }
                     onClick={() =>
-                      setFindDate(new Date(findDate.setDate(findDate.getDate() - 1)))
+                      subDate()
+                      // setFindDate(new Date(findDate.setDate(findDate.getDate() - 1)))
                     }
                   />
                 </TableCell>
@@ -186,7 +200,8 @@ export default function DiaryTest() {
                               .default
                           }
                           onClick={() =>
-                            setFindDate(new Date(findDate.setDate(findDate.getDate() + 1)))
+                            // setFindDate(new Date(findDate.setDate(findDate.getDate() + 1)))
+                            addDate()
                           }
                         />
                       </>
@@ -211,7 +226,7 @@ export default function DiaryTest() {
                   colSpan="6"
                   style={{ textAlign: "center" }}
                 >
-                  <DiarySmallText>제목 : 안주현의 그림 일기 COUNTER :: {counter} </DiarySmallText>
+                  <DiarySmallText>제목 : 안주현의 그림 일기</DiarySmallText>
                 </TableCell>
               </TableRow>
               <TableRow sx={{ border: 0 }}>
@@ -253,17 +268,7 @@ export default function DiaryTest() {
                             {diary.memo}
                           </p>
                           : <>
-                            <Box component="form" sx={{ m: 3, width: 1550, maxWidth: '100%', }} noValidate autoComplete="off">
-                              <TextField
-                                id="standard-multiline-static"
-                                label="MEMO"
-                                multiline
-                                rows={4}
-                                // defaultValue="MEMO"
-                                variant="standard"
-                                fullWidth
-                              />
-                            </Box>
+                            <MemoModify data={diary}/>
                           </>}
                       </div>
 

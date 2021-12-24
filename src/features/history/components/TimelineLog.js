@@ -12,6 +12,7 @@ import { DatePicker } from "@mui/lab";
 import TextField from "@mui/material/TextField";
 import dayjs from "dayjs";
 import { triggerDateSelect } from '@fullcalendar/react';
+import { HistoryMap } from '..';
 
 
 
@@ -66,26 +67,27 @@ export default function TimelineLog() {
 
 
   return (<>
-      <div style={{ borderCollapse: "collapse" , textAlign:"right"}}>
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <DatePicker
-            views={["day"]}
-            label="날짜 이동"
-            value={today}
-            maxDate={"2021-12-21"}
-            onChange={(newValue) => {
-              // triggerDateSelect
-              setDate(newValue);
-              setJuudata(mytest['data'])
-            }}
-            renderInput={(params) => (
-              <TextField {...params} helperText={null} />
-            )}
-          />
-        </LocalizationProvider>
-        <br/>
-        <button> Go!</button>
-      </div>
+    <div style={{ borderCollapse: "collapse", textAlign: "right" }}>
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <DatePicker
+          views={["day"]}
+          label="날짜 이동"
+          value={today}
+          maxDate={"2021-12-21"}
+          onChange={(newValue) => {
+            // triggerDateSelect
+            setDate(newValue);
+            setJuudata(mytest['data'])
+          }}
+          renderInput={(params) => (
+            <TextField {...params} helperText={null} />
+          )}
+        />
+      </LocalizationProvider>
+      <br />
+      <button> Go!</button>
+    </div>
+    <HistoryMap data={juudata} />
     {Object.keys(juudata).map((value, index, array) => (
       <TimelineItem>
         <Date>{juudata[value].log_date} ..<b>{juudata[value].weather}</b></Date>
@@ -93,7 +95,7 @@ export default function TimelineLog() {
         <Contents>
           <p><b>{juudata[value].location}</b>에서 {juudata[value].contents}</p>
           {/* <p>{JSON.stringify(juudata[value])}</p> */}
-          <TimelineModify history = {juudata[value]}/>
+          <TimelineModify history={juudata[value]} />
         </Contents>
       </TimelineItem>
     ))

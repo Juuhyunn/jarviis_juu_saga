@@ -1,7 +1,7 @@
 import { PayloadAction } from "@reduxjs/toolkit";
 import { call, put, takeLatest } from "redux-saga/effects";
 import diaryAPI from "../reducer/diaryAPI";
-import { DiaryDataPayload, diaryFindFailure, DiaryFindPayload, diaryFindRequest, diaryFindSuccess } from "../reducer/diarySlice";
+import { DiaryDataPayload, diaryFindFailure, DiaryFindPayload, diaryFindRequest, diaryFindSuccess, diaryMemoFailure, DiaryMemoPayload, diaryMemoRequest, diaryMemoSuccess } from "../reducer/diarySlice";
 
 // find
 function* find(action: PayloadAction<DiaryFindPayload>) {
@@ -20,4 +20,23 @@ function* find(action: PayloadAction<DiaryFindPayload>) {
 
 export function* watchDiaryFind() {
     yield takeLatest(diaryFindRequest.type, find);
+}
+
+// Memo
+function* memo(action: PayloadAction<DiaryMemoPayload>) {
+    try {
+        // alert("SAGA!")
+        const result: DiaryMemoPayload = yield call(
+            diaryAPI.memoAPI,
+            action.payload
+        );
+        yield put(diaryMemoSuccess(result));
+    } catch (error: any) {
+        yield put(diaryMemoFailure(error))
+        alert(error)
+    }
+}
+
+export function* watchDiaryMemo() {
+    yield takeLatest(diaryMemoRequest.type, memo);
 }

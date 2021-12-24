@@ -18,6 +18,11 @@ export interface DiaryFindPayload {
     user_id: number
     diary_date: string
 }
+export interface DiaryMemoPayload {
+    id: number
+    user_id: number
+    memo: string
+}
 
 export interface DiaryState {
     diaryLoading: boolean;
@@ -55,6 +60,22 @@ const DiarySlice = createSlice({
             state.diaryLoading = true;
             state.error = action.payload;
         },
+        diaryMemoRequest(state: DiaryState, _action: PayloadAction<DiaryMemoPayload>) {
+            alert("Slice!")
+            state.diaryLoading = true;
+            state.error = null;
+        },
+        diaryMemoSuccess(state: DiaryState, action: PayloadAction<DiaryMemoPayload>) {
+            alert("Slice SUCCESS!")
+            state.diaryLoading = false;
+            // state.diaryData = action.payload;
+            window.location.href = "../diary/diary"
+        },
+        diaryMemoFailure(state: DiaryState, action: PayloadAction<{ error: any }>) {
+            alert("Slice FAIL!")
+            state.diaryLoading = true;
+            state.error = action.payload;
+        },
     }
 })
 
@@ -71,7 +92,10 @@ const { reducer, actions } = DiarySlice;
 export const {
     diaryFindRequest,
     diaryFindSuccess,
-    diaryFindFailure
+    diaryFindFailure,
+    diaryMemoRequest,
+    diaryMemoSuccess,
+    diaryMemoFailure
 } = actions;
 
 export default reducer;

@@ -4,7 +4,7 @@ import { LayOut } from "features/common";
 export default function History() {
     return (
     <LayOut>
-        <HistoryMap/>
+        {/* <HistoryMap/> */}
         <></>
         <Timeline/>
     </LayOut>)
